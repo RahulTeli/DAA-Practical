@@ -1,0 +1,74 @@
+class MergeSort
+{
+	static int[]b;
+	public static void main(String[] args)
+	{
+		int[]a={5,2,1,4,9,10,8,7,3};
+		b = new int[a.length];
+		divide(a,0,a.length-1);
+		printarray(a);
+	}
+	public static void divide(int[] a , int lb,int up)
+	{
+		if(lb<up)
+		{
+			int mid=(lb+up)/2;
+			divide(a,lb,mid);
+			divide(a,mid+1,up);
+			merge(a,lb,mid,up);
+		}
+	}
+	public static void merge(int[] a,int lb,int mid,int ub)
+	{
+				
+		int i=lb;
+		int j=mid+1;
+		int k=lb;
+		while(i<=mid && j<=ub)
+		{
+			if(a[i]<=a[j])
+			{
+				b[k]=a[i];
+				i++;
+			}
+			else
+			{
+				b[k]=a[j];
+				j++;
+			}
+			k++;
+		}
+		if(i>mid)
+		{
+			while(j<=ub)
+			{
+				b[k]=a[j];
+				j++;
+				k++;
+			}
+		}else{
+			while(i<=mid)
+			{
+				b[k]=a[i];
+				i++;
+				k++;
+			}
+		}
+		
+		for(k=lb;k<=ub;k++)
+		{
+			a[k]=b[k];
+		}
+		
+		
+	}
+	public static void printarray(int[] a)
+	{
+		for(int i:a)
+		{
+			System.out.print(i + " ");
+		}
+	}
+}
+		
+		

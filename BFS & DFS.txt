@@ -1,0 +1,144 @@
+// ------------------------------------ BFS -----------------------------------
+
+import java.util.*;
+class Graph {
+
+	// A utility function to add an edge in an
+	// undirected graph
+	public void addEdge(ArrayList<ArrayList<Integer> > adj,
+						int source, int dest)
+	{
+		adj.get(source).add(dest);
+	}
+
+	// A utility function to print the adjacency list
+	// representation of graph
+	public void
+	printGraph(ArrayList<ArrayList<Integer> > adj)
+	{
+		for (int i = 0; i < adj.size(); i++) {
+			System.out.println("\nAdjacency list of vertex"
+							+ i);
+			System.out.print("head");
+			for (int j = 0; j < adj.get(i).size(); j++) {
+				System.out.print(" -> "
+								+ adj.get(i).get(j));
+			}
+			System.out.println();
+		}
+	}
+	}
+class BFS
+{	
+	public static void bfs(int v,int source,ArrayList<ArrayList<Integer>> adj,int pred[],int dist[])
+	{
+		Queue<Integer> queue = new LinkedList<>();
+		boolean[] isvisited = new boolean[v];
+		for(int i=0;i<v;i++)
+		{
+			isvisited[i]=false;
+			pred[i]= -1;
+			dist[i] = Integer.MAX_VALUE;
+		}
+		dist[source]=0;
+		isvisited[source]=true;
+		queue.add(source);
+		
+		while(!queue.isEmpty())
+		{
+			int curr = queue.poll();
+			System.out.println(curr);
+			
+			for(int i=0;i<adj.get(curr).size();i++)
+			{
+				int neigh = adj.get(curr).get(i);
+				if(isvisited[neigh]==false)
+				{
+					isvisited[neigh]=true;
+					dist[neigh]=dist[curr]+1;
+					pred[neigh]=curr;
+					queue.add(neigh);
+				}
+			}
+		}
+	
+	}
+	
+	public static void main(String[] args)
+	{
+		// Creating a graph with 4 vertices
+		int V = 4;
+		ArrayList<ArrayList<Integer> > adj
+			= new ArrayList<ArrayList<Integer> >(V);
+
+		for (int i = 0; i < V; i++)
+			adj.add(new ArrayList<Integer>());
+
+		// Adding edges one by one
+		Graph g = new Graph();
+		g.addEdge(adj,0, 1);
+        g.addEdge(adj,0, 2);
+        g.addEdge(adj,1, 2);
+        g.addEdge(adj,2, 0);
+        g.addEdge(adj,2, 3);
+        g.addEdge(adj,3, 3);
+		
+		int pred[] = new int[V+1];
+		int dist[] = new int [V+1];
+	
+		bfs(V,2,adj,pred,dist);
+		
+		
+	}
+}
+	
+
+//------------------------------------ DFS -------------------------------------
+
+
+import java.util.*;
+
+class Graph {
+  private LinkedList<Integer> adjLists[];
+  private boolean visited[];
+
+  // Graph creation
+  Graph(int vertices) {
+    adjLists = new LinkedList[vertices];
+    visited = new boolean[vertices];
+
+    for (int i = 0; i < vertices; i++)
+      adjLists[i] = new LinkedList<Integer>();
+  }
+
+  // Add edges
+  void addEdge(int src, int dest) {
+    adjLists[src].add(dest);
+  }
+
+  // DFS algorithm
+  void DFS(int vertex) {
+    visited[vertex] = true;
+    System.out.print(vertex + " ");
+
+    Iterator<Integer> ite = adjLists[vertex].listIterator();
+    while (ite.hasNext()) {
+      int ad = ite.next();
+      if (!visited[ad])
+        DFS(ad);
+    }
+  }
+
+  public static void main(String args[]) {
+    Graph g = new Graph(4);
+
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 2);
+    g.addEdge(2, 3);
+
+    System.out.println("Following is Depth First Traversal");
+
+    g.DFS(2);
+  }
+}

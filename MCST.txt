@@ -1,0 +1,208 @@
+// ------------------------------- Prims -----------------------------------
+
+import java.io.*;
+import java.util.*;
+
+
+class Pair implements Comparable<Pair>
+{
+	int v;
+	int wt;
+	Pair(int v,int wt)
+	{
+		this.v=v;
+		this.wt=wt;
+	}
+	public int compareTo(Pair that)
+	{
+		return this.wt-that.wt;
+	}
+}
+
+class Tree {
+
+
+static int spanningTree(int V, int E, int edges[][])
+	{
+		ArrayList<ArrayList<Pair>> adj=new ArrayList<>();
+		for(int i=0;i<V;i++)
+		{
+			adj.add(new ArrayList<Pair>());
+		}
+		for(int i=0;i<edges.length;i++)
+		{
+			int u=edges[i][0];
+			int v=edges[i][1];
+			int wt=edges[i][2];
+			adj.get(u).add(new Pair(v,wt));
+			adj.get(v).add(new Pair(u,wt));
+		}
+		PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
+		pq.add(new Pair(0,0));
+		int[] vis=new int[V];
+		int s=0;
+		while(!pq.isEmpty())
+		{
+			Pair node=pq.poll();
+			int v=node.v;
+			int wt=node.wt;
+			
+			if(vis[v]==1) 
+			continue;
+			
+			s+=wt;
+			vis[v]=1;
+			for(Pair it:adj.get(v))
+			{
+				if(vis[it.v]==0)
+				{
+					pq.add(new Pair(it.v,it.wt));
+				}
+			}
+		}
+		return s;
+	}
+	
+
+	public static void main (String[] args) {
+		int graph[][] = new int[][] {{0,1,5},
+					      {1,2,3},
+					     {0,2,1}};
+
+
+		System.out.println(spanningTree(3,3,graph));
+	}
+}
+
+
+// ------------------------- kruskals -----------------------------------
+
+
+import java.util.ArrayList; 
+import java.util.Comparator; 
+import java.util.List; 
+
+public class KruskalsMST { 
+
+	
+	static class Edge { 
+		int src, dest, weight; 
+
+		public Edge(int src, int dest, int weight) 
+		{ 
+			this.src = src; 
+			this.dest = dest; 
+			this.weight = weight; 
+		} 
+	} 
+
+	
+	static class Subset { 
+		int parent, rank; 
+
+		public Subset(int parent, int rank) 
+		{ 
+			this.parent = parent; 
+			this.rank = rank; 
+		} 
+	} 
+
+	
+	public static void main(String[] args) 
+	{ 
+		int V = 4; 
+		List<Edge> graphEdges = new ArrayList<Edge>( 
+			List.of(new Edge(0, 1, 10), new Edge(0, 2, 6), 
+					new Edge(0, 3, 5), new Edge(1, 3, 15), 
+					new Edge(2, 3, 4))); 
+
+	
+		graphEdges.sort(new Comparator<Edge>() { 
+			@Override public int compare(Edge o1, Edge o2) 
+			{ 
+				return o1.weight - o2.weight; 
+			} 
+		}); 
+
+		kruskals(V, graphEdges); 
+	} 
+
+
+	private static void kruskals(int V, List<Edge> edges) 
+	{ 
+		int j = 0; 
+		int noOfEdges = 0; 
+
+	
+		Subset subsets[] = new Subset[V]; 
+
+		
+		Edge results[] = new Edge[V]; 
+
+	
+		for (int i = 0; i < V; i++) { 
+			subsets[i] = new Subset(i, 0); 
+		} 
+
+	
+		while (noOfEdges < V - 1) { 
+
+	
+			Edge nextEdge = edges.get(j); 
+			int x = findRoot(subsets, nextEdge.src); 
+			int y = findRoot(subsets, nextEdge.dest); 
+
+			if (x != y) { 
+				results[noOfEdges] = nextEdge; 
+				union(subsets, x, y); 
+				noOfEdges++; 
+			} 
+
+			j++; 
+		} 
+
+
+		System.out.println( 
+			"Following are the edges of the constructed MST:"); 
+		int minCost = 0; 
+		for (int i = 0; i < noOfEdges; i++) { 
+			System.out.println(results[i].src + " -- "
+							+ results[i].dest + " == "
+							+ results[i].weight); 
+			minCost += results[i].weight; 
+		} 
+		System.out.println("Total cost of MST: " + minCost); 
+	} 
+
+
+	private static void union(Subset[] subsets, int x, 
+							int y) 
+	{ 
+		int rootX = findRoot(subsets, x); 
+		int rootY = findRoot(subsets, y); 
+
+		if (subsets[rootY].rank < subsets[rootX].rank) { 
+			subsets[rootY].parent = rootX; 
+		} 
+		else if (subsets[rootX].rank 
+				< subsets[rootY].rank) { 
+			subsets[rootX].parent = rootY; 
+		} 
+		else { 
+			subsets[rootY].parent = rootX; 
+			subsets[rootX].rank++; 
+		} 
+	} 
+
+
+	private static int findRoot(Subset[] subsets, int i) 
+	{ 
+		if (subsets[i].parent == i) 
+			return subsets[i].parent; 
+
+		subsets[i].parent 
+			= findRoot(subsets, subsets[i].parent); 
+		return subsets[i].parent; 
+	} 
+} 
+

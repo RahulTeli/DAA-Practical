@@ -1,0 +1,66 @@
+class quick
+{
+	public static void main(String[] args)
+	{
+		int[] a = {54,2,78,42,32,5,1,7};
+		int len = a.length;
+		
+		quick q =new quick();
+		q.sort(a,0,len-1);
+		q.printarray(a);
+		
+	}
+	
+	
+	
+	 void sort(int[]a,int low, int high)
+	{
+		int pi = partition(a,low,high);//pi is pivot elment...
+		if(low < pi-1) //(0 < middle-1)
+		{
+			sort(a,low,pi-1);// by recursion, it sorts left side
+		}
+		if(pi<high) // (middle < 7)
+		{
+			sort(a,pi,high); //by recursion,it sorts right side
+		}
+	}
+	
+	 int partition(int[] a, int low, int high)
+	{
+		int pivot = a[(low+high)/2]; //  finding middle element..
+		while(low<=high) 
+		{
+			
+			while(a[low]<pivot) // a[0]< middle
+			{
+				low++; // cursor moves to next element..
+			} 
+			while(a[high]>pivot) // a[7]>middle
+			{
+				high--; // cursor moves to next element..
+			}
+			if(low<=high)
+			{
+				int temp=a[low];  //swapping
+				a[low]=a[high];     
+				a[high]=temp;     
+			
+				low++;
+				high--;
+			}
+		}
+		return low;
+		
+	}
+			
+	
+	
+	void printarray (int[] a)
+	{
+		for(int i:a)
+		{
+			System.out.print(i+ " ");
+		}
+	}
+}
